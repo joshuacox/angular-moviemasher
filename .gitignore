@@ -8,3 +8,9 @@ app/user/
 tmp
 .DS_Store
 .idea
+port
+www_dir
+tmp_dir
+mysql_password
+mysql_user
+mysql_dir

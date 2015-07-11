@@ -10,7 +10,7 @@ build: builddocker beep
 
 #run: steam_username steam_password steam_guard_code steam_dir mysql builddocker rundocker beep
 
-run:  tmp_dir mysqlmeta run
+run:  www_dir tmp_dir mysqlmeta run
 
 mysqlmeta: mysql_password mysql_dir mysql
 
