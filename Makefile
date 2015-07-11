@@ -10,7 +10,7 @@ build: builddocker beep
 
 #run: steam_username steam_password steam_guard_code steam_dir mysql builddocker rundocker beep
 
-run:  www_dir tmp_dir mysqlmeta run jobs
+run:  www_dir tmp_dir mysqlmeta rundocker jobs
 
 mysqlmeta: mysql_password mysql_dir mysql
 
@@ -21,7 +21,7 @@ mysql:
 	-v `cat mysql_dir`:/var/lib/mysql \
 	-d mysql:latest
 
-run:
+rundocker:
 	@docker run --name=`cat NAME` \
 	-d \
 	--cidfile="cid" \
