@@ -25,8 +25,11 @@ rundocker:
 	@docker run --name=`cat NAME` \
 	-d \
 	--cidfile="cid" \
-	-v `cat www_dir`:/var/www \
-	-v `cat tmp_dir`:/tmp \
+	-v `cat www_dir`/config:/var/www/config \
+	-v `cat www_dir`/html:/var/www/html \
+	-v `cat tmp_dir`/moviemasher/temporary:/tmp/moviemasher/temporary \
+	-v `cat tmp_dir`/moviemasher/queue:/tmp/moviemasher/queue \
+	-v `cat tmp_dir`/moviemasher/log:/tmp/moviemasher/log \
 	-p 44884:80 \
 	--link `cat NAME`-mysql:mysql \
 	-t `cat TAG`
