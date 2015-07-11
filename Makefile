@@ -10,7 +10,7 @@ build: builddocker beep
 
 #run: steam_username steam_password steam_guard_code steam_dir mysql builddocker rundocker beep
 
-run:  www_dir tmp_dir mysqlmeta run
+run:  www_dir tmp_dir mysqlmeta run jobs
 
 mysqlmeta: mysql_password mysql_dir mysql
 
@@ -29,9 +29,15 @@ run:
 	-v `cat tmp_dir`:/tmp \
 	-p 44884:80 \
 	--link `cat NAME`-mysql:mysql \
-	-v /var/run/docker.sock:/run/docker.sock \
-	-v $(shell which docker):/bin/docker \
 	-t `cat TAG`
+
+jobs:
+	@docker run --name=`cat NAME`jobs \
+	-d \
+	--cidfile="jobscid" \
+	--volumes-from=`cat NAME` \
+	-t moviemasher/moviemasher.rb \
+	process_loop
 
 builddocker:
 	/usr/bin/time -v docker build -t `cat TAG` .
@@ -41,23 +47,23 @@ beep:
 	@aplay /usr/share/sounds/alsa/Front_Center.wav
 
 kill:
+	@docker kill `cat jobscid`
 	@docker kill `cat cid`
-
-killmysql:
 	@docker kill `cat mysql`
 
 rm-image:
+	@docker rm `cat jobscid`
+	@rm jobscid
 	@docker rm `cat cid`
 	@rm cid
-
-rmmysql-image:
 	@docker rm `cat mysql`
 	@rm mysql
 
 cleanfiles:
 	rm mysql_password
-
-rmall: rm rmmysql
+	rm tmp_dir
+	rm www_dir
+	rm mysql_dir
 
 rm: kill rm-image
 
