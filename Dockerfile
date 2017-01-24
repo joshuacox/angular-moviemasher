@@ -1,28 +1,28 @@
 FROM php:apache
 MAINTAINER Movie Masher <support@moviemasher.com>
 
-# create queue directory in case one isn't mounted
-RUN mkdir -p -m 0777 /tmp/moviemasher/queue
-VOLUME /tmp/moviemasher/queue
-
-# create temporary directory in case one isn't mounted
-RUN mkdir -p -m 0777 /tmp/moviemasher/temporary
-VOLUME /tmp/moviemasher/temporary
-
-# allow log directory to be mounted
+# create needed directories
 RUN mkdir -p -m 0777 /tmp/moviemasher/log
+RUN mkdir -p -m 0777 /tmp/moviemasher/queue
+RUN mkdir -p -m 0777 /tmp/moviemasher/temporary
+RUN mkdir -p -m 0777 /var/www/html/user-media
+RUN mkdir -p -m 0777 /var/www/config
+RUN mkdir -p -m 0777 /var/www/user-data
+
+# give moviemasher.rb container access to relevant ones
 VOLUME /tmp/moviemasher/log
+VOLUME /tmp/moviemasher/queue
+VOLUME /tmp/moviemasher/temporary
+VOLUME /var/www/html
 
 # install our php configuration
 COPY config/docker/php.ini /usr/local/etc/php/conf.d/moviemasher.ini
 
 # install our movie masher configuration
-COPY config/moviemasher.ini /var/www/config/moviemasher.ini
+COPY config/docker/moviemasher.ini /var/www/config/moviemasher.ini
 
-# install entire project
-COPY . /var/www/html/
+# install our redirect from web root to angular-moviemasher/app
+COPY config/index.html /var/www/html/
 
-# create user data/media directory in case it doesn't exist
-RUN mkdir -p -m 0777 /var/www/html/user
-VOLUME /var/www/html
-
+# install entire project at root
+COPY . /var/www/html/angular-moviemasher/

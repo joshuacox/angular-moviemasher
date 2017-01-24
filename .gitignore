@@ -14,3 +14,4 @@ tmp_dir
 mysql_password
 mysql_user
 mysql_dir
+log
